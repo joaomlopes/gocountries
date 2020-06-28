@@ -8,7 +8,7 @@ import (
 func TestAllCountries(t *testing.T) {
 	countries, err := AllCountries("")
 	if err != nil {
-		t.Errorf("Got unexpected error for requested country 'italy': %v", err)
+		t.Errorf("Got unexpected error for requested all countries: %v", err)
 		return
 	}
 
@@ -22,7 +22,7 @@ func TestAllCountries(t *testing.T) {
 func TestAllCountriesFiltered(t *testing.T) {
 	countries, err := AllCountries("name;capital")
 	if err != nil {
-		t.Errorf("Got unexpected error for requested country 'italy': %v", err)
+		t.Errorf("Got unexpected error for requested all countries: %v", err)
 		return
 	}
 
@@ -106,6 +106,74 @@ func TestCountriesByCapitalFiltered(t *testing.T) {
 
 	if country.Name != "Estonia" {
 		t.Errorf("Got unexpected country: expected '%s', got '%s' instead", "Estonia", country.Name)
+	}
+
+	log.Printf("Fetched: %v", country)
+}
+
+func TestCountriesByCode(t *testing.T) {
+	code := "pt"
+	countries, err := CountriesByCode(code, "")
+	if err != nil {
+		t.Errorf("Got unexpected error for CountriesByCode(\"%s\"): %v", code, err)
+		return
+	}
+
+	country := countries
+
+	if country.Name != "Portugal" {
+		t.Errorf("Got unexpected country: expected '%s', got '%s' instead", "Portugal", country.Name)
+	}
+
+	log.Printf("Fetched: %v", country)
+}
+
+func TestCountriesByCodeFiltered(t *testing.T) {
+	code := "prt"
+	countries, err := CountriesByCode(code, "name;capital")
+	if err != nil {
+		t.Errorf("Got unexpected error for CountriesByCode(\"%s\"): %v", code, err)
+		return
+	}
+
+	country := countries
+
+	if country.Name != "Portugal" {
+		t.Errorf("Got unexpected country: expected '%s', got '%s' instead", "Portugal", country.Name)
+	}
+
+	log.Printf("Fetched: %v", country)
+}
+
+func TestCountriesByRegion(t *testing.T) {
+	region := "europe"
+	countries, err := CountriesByRegion(region, "")
+	if err != nil {
+		t.Errorf("Got unexpected error for CountriesByRegion(\"%s\"): %v", region, err)
+		return
+	}
+
+	country := (countries)[0]
+
+	if country.Capital != "Mariehamn" {
+		t.Errorf("Got unexpected country: expected '%s', got '%s' instead", "Åland Islands", country.Name)
+	}
+
+	log.Printf("Fetched: %v", country)
+}
+
+func TestCountriesByRegionFiltered(t *testing.T) {
+	region := "europe"
+	countries, err := CountriesByRegion(region, "name;capital")
+	if err != nil {
+		t.Errorf("Got unexpected error for CountriesByRegion(\"%s\"): %v", region, err)
+		return
+	}
+
+	country := (countries)[0]
+
+	if country.Capital != "Mariehamn" {
+		t.Errorf("Got unexpected country: expected '%s', got '%s' instead", "Åland Islands", country.Name)
 	}
 
 	log.Printf("Fetched: %v", country)
